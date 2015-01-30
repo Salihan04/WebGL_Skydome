@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Skydome</title>
+
+<style>
+	canvas {
+		border: 1px solid #000000;
+	}
+</style>
+</head>
+
+<body>
+	<header>
+		<h1>Skydome</h1>
+		<div>Creating a skydomewith WebGL using Three.js library</div>
+	</header>
+
+	<script src="js/three.min.js"></script>
+	<script>
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera(75, 1500 / 700, 0.1, 1000);
+		
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize(1500, 700);
+		document.body.appendChild(renderer.domElement);
+
+		var ambientLight = new THREE.AmbientLight(0x333333);
+		scene.add(ambientLight);
+
+		var dirLight = new THREE.DirectionalLight(0xffffff, 1);
+		dirLight.position.set(5, 3, 5);
+		scene.add(dirLight);
+
+		var geometry = new THREE.SphereGeometry(1000, 60, 40);
+		var material = new THREE.MeshBasicMaterial();
+		material.map = THREE.ImageUtils.loadTexture("images/Sky.jpg");
+		material.side = THREE.BackSide;
+		var skydome = new THREE.Mesh(geometry, material);
+
+		scene.add(skydome);
+
+		function render() {
+			requestAnimationFrame(render);
+
+			var timer = - new Date().getTime() * 0.0005; 
+			camera.position.x = 200 * Math.cos(timer);
+			camera.position.y = 200 * Math.sin(timer);
+
+			renderer.render(scene, camera);
+		}
+
+		render();
+	</script>
+</body>
+</html>
